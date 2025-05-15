@@ -1,6 +1,7 @@
 import type {Capsule, Mission} from "../types/types";
 
 const RenderCell = (key: keyof Capsule, value: Capsule[keyof Capsule]) => {
+  //
   if (key === "missions") {
     const missions = value as Mission[];
     if (missions.length === 0) return <span className="text-gray-500">No missions</span>;
@@ -27,14 +28,30 @@ const RenderCell = (key: keyof Capsule, value: Capsule[keyof Capsule]) => {
     );
   }
 
+  //
+  if (key === "original_launch") {
+    const isoString = value as string | null;
+    const formatted = isoString
+      ? new Date(isoString).toLocaleString("en-IN", {
+          dateStyle: "medium",
+          timeStyle: "short",
+          timeZone: "Asia/Kolkata",
+        })
+      : "Not launched";
+    return <span className="text-gray-700 text-sm">{formatted}</span>;
+  }
+
+  //
   if (typeof value === "object" && value !== null) {
     return <span className="text-gray-700 text-sm break-all">{JSON.stringify(value)}</span>;
   }
 
+  //
   return (
     <span className="text-gray-700 text-sm">
       {value === null || value === "" ? "N/A" : String(value)}
     </span>
   );
 };
+
 export default RenderCell;
